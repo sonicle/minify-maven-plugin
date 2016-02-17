@@ -114,7 +114,7 @@ public class MinifyMojo extends AbstractMojo {
      *
      * @since 1.3.2
      */
-    @Parameter(property = "suffix", defaultValue = "min")
+    @Parameter(property = "suffix", defaultValue = ".min")
     private String suffix;
 
     /**

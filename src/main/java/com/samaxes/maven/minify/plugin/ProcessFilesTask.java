@@ -136,6 +136,15 @@ public abstract class ProcessFilesTask implements Callable<Object> {
         this.sourceFilesEmpty = sourceFiles.isEmpty();
         this.sourceIncludesEmpty = sourceIncludes.isEmpty();
     }
+	
+	private String basename(String filename) {
+		String bn = FileUtils.basename(filename);
+		if(bn.endsWith(".")) {
+			return bn.substring(0, bn.length()-1);
+		} else {
+			return bn;
+		}
+	}
 
     /**
      * Method executed by the thread.
@@ -160,9 +169,8 @@ public abstract class ProcessFilesTask implements Callable<Object> {
                                 originalPath.lastIndexOf(File.separator));
                         File targetPath = new File(targetDir.getAbsolutePath() + subPath);
                         targetPath.mkdirs();
-						
                         File minifiedFile = new File(targetPath, (nosuffix) ? mergedFile.getName()
-                                : FileUtils.basename(mergedFile.getName()) + suffix
+                                : basename(mergedFile.getName()) + suffix
                                         + FileUtils.getExtension(mergedFile.getName()));
                         minify(mergedFile, minifiedFile);
                     }
@@ -174,7 +182,7 @@ public abstract class ProcessFilesTask implements Callable<Object> {
                     File mergedFile = new File(targetDir, (nosuffix) ? mergedFilename + TEMP_SUFFIX : mergedFilename);
                     merge(mergedFile);
                     File minifiedFile = new File(targetDir, (nosuffix) ? mergedFilename
-                            : FileUtils.basename(mergedFilename) + suffix + FileUtils.getExtension(mergedFilename));
+                            : basename(mergedFilename) + suffix + FileUtils.getExtension(mergedFilename));
                     minify(mergedFile, minifiedFile);
                     if (nosuffix) {
                         if (!mergedFile.delete()) {

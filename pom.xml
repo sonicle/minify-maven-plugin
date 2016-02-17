@@ -5,18 +5,18 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.samaxes.maven</groupId>
+    <groupId>com.sonicle.maven</groupId>
     <artifactId>minify-maven-plugin</artifactId>
     <version>1.7.5-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
-    <name>Minify Maven Plugin</name>
+    <name>Sonicle Minify Maven Plugin</name>
     <description>Combine and minimize JavaScript and CSS files for faster page loading.</description>
-    <url>https://github.com/samaxes/minify-maven-plugin</url>
+    <url>https://github.com/sonicle/minify-maven-plugin</url>
     <inceptionYear>2009</inceptionYear>
     <organization>
-        <name>Samuel Santos</name>
-        <url>http://www.samaxes.com</url>
+        <name>Sonicle Srl</name>
+        <url>http://www.sonicle.com</url>
     </organization>
     <licenses>
         <license>
@@ -28,13 +28,13 @@
 
     <developers>
         <developer>
-            <name>Samuel Santos</name>
-            <url>http://www.samaxes.com</url>
+            <name>Matteo Albinola</name>
+            <url>http://www.sonicle.com</url>
             <roles>
                 <role>Project owner</role>
                 <role>Developer</role>
             </roles>
-            <timezone>Europe/Lisbon</timezone>
+            <timezone>Europe/Milan</timezone>
         </developer>
     </developers>
 
@@ -43,28 +43,14 @@
     </prerequisites>
 
     <scm>
-        <connection>scm:git:https://github.com/samaxes/minify-maven-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:samaxes/minify-maven-plugin.git</developerConnection>
-        <url>https://github.com/samaxes/minify-maven-plugin</url>
+        <connection>scm:git:https://github.com/sonicle/minify-maven-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:sonicle/minify-maven-plugin.git</developerConnection>
+        <url>https://github.com/sonicle/minify-maven-plugin</url>
     </scm>
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/samaxes/minify-maven-plugin/issues</url>
+        <url>https://github.com/sonicle/minify-maven-plugin/issues</url>
     </issueManagement>
-    <ciManagement>
-        <system>Travis CI</system>
-        <url>https://travis-ci.org/samaxes/minify-maven-plugin</url>
-    </ciManagement>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
     <properties>
         <maven.compiler.source>1.7</maven.compiler.source>

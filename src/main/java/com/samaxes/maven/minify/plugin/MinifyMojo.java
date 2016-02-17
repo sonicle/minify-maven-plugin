@@ -65,7 +65,11 @@ public class MinifyMojo extends AbstractMojo {
         /**
          * Google Closure Compiler
          */
-        CLOSURE
+        CLOSURE,
+		/**
+         * Cleaner
+         */
+		CLEANER
     }
 
     /* ************** */
@@ -271,6 +275,7 @@ public class MinifyMojo extends AbstractMojo {
      * <ul>
      * <li>{@code YUI}: <a href="http://yui.github.io/yuicompressor/">YUI Compressor</a></li>
      * <li>{@code CLOSURE}: <a href="https://developers.google.com/closure/compiler/">Google Closure Compiler</a></li>
+	 * <li>{@code CLEANER}</li>
      * </ul>
      *
      * @since 1.6
@@ -452,6 +457,12 @@ public class MinifyMojo extends AbstractMojo {
      */
     @Parameter(property = "closureAngularPass", defaultValue = "false")
     private boolean closureAngularPass;
+	
+	/**
+	 * Enables or disables pretty printing.
+	 */
+	@Parameter(property = "closurePrettyPrint", defaultValue = "false")
+	private boolean closurePrettyPrint;
 
     /**
      * Executed when the goal is invoked, it will first invoke a parallel lifecycle, ending at the given phase.
@@ -552,7 +563,7 @@ public class MinifyMojo extends AbstractMojo {
         }
 
         return new ClosureConfig(closureLanguage, closureCompilationLevel, dependencyOptions, externs,
-                closureUseDefaultExterns, closureCreateSourceMap, closureAngularPass);
+                closureUseDefaultExterns, closureCreateSourceMap, closureAngularPass, closurePrettyPrint);
     }
 
     private Collection<ProcessFilesTask> createTasks(YuiConfig yuiConfig, ClosureConfig closureConfig)

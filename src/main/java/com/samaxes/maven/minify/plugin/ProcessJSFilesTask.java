@@ -39,6 +39,8 @@ import com.google.javascript.jscomp.Compiler;
 import com.google.javascript.jscomp.CompilerOptions;
 import com.google.javascript.jscomp.SourceFile;
 import com.google.javascript.jscomp.SourceMap;
+import com.samaxes.maven.minify.cleaner.CleanerOptions;
+import com.samaxes.maven.minify.cleaner.JavaScriptCleaner;
 import com.samaxes.maven.minify.common.ClosureConfig;
 import com.samaxes.maven.minify.common.JavaScriptErrorReporter;
 import com.samaxes.maven.minify.common.YuiConfig;
@@ -116,6 +118,7 @@ public class ProcessJSFilesTask extends ProcessFilesTask {
                     options.setOutputCharset(charset);
                     options.setLanguageIn(closureConfig.getLanguage());
                     options.setAngularPass(closureConfig.getAngularPass());
+					options.setPrettyPrint(closureConfig.getPrettyPrint());
                     options.setDependencyOptions(closureConfig.getDependencyOptions());
 
                     File sourceMapResult = new File(minifiedFile.getPath() + ".map");
@@ -161,6 +164,13 @@ public class ProcessJSFilesTask extends ProcessFilesTask {
                     compressor.compress(writer, yuiConfig.getLineBreak(), yuiConfig.isMunge(), verbose,
                             yuiConfig.isPreserveSemicolons(), yuiConfig.isDisableOptimizations());
                     break;
+				case CLEANER:
+					log.info("Using Cleaner engine.");
+					
+					CleanerOptions cleanerOptions = new CleanerOptions();
+					JavaScriptCleaner cleaner = new JavaScriptCleaner(reader, cleanerOptions);
+					cleaner.process(writer);
+					break;
                 default:
                     log.warn("JavaScript engine not supported.");
                     break;

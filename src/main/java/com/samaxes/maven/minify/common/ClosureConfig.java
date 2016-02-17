@@ -45,6 +45,8 @@ public class ClosureConfig {
     private final Format sourceMapFormat;
 
     private final Boolean angularPass;
+	
+	private final Boolean prettyPrint;
 
     /**
      * Init Closure Compiler values.
@@ -58,7 +60,7 @@ public class ClosureConfig {
      * @param angularPass use {@code @ngInject} annotation to generate Angular injections
      */
     public ClosureConfig(LanguageMode language, CompilationLevel compilationLevel, DependencyOptions dependencyOptions,
-            List<SourceFile> externs, boolean useDefaultExterns, boolean createSourceMap, boolean angularPass) {
+            List<SourceFile> externs, boolean useDefaultExterns, boolean createSourceMap, boolean angularPass, boolean prettyPrint) {
         this.language = language;
         this.compilationLevel = compilationLevel;
         this.dependencyOptions = dependencyOptions;
@@ -66,6 +68,7 @@ public class ClosureConfig {
         this.useDefaultExterns = useDefaultExterns;
         this.sourceMapFormat = (createSourceMap) ? SourceMap.Format.V3 : null;
         this.angularPass = angularPass;
+		this.prettyPrint = prettyPrint;
     }
 
     /**
@@ -129,5 +132,14 @@ public class ClosureConfig {
      */
     public Boolean getAngularPass() {
         return angularPass;
+    }
+	
+	/**
+     * Gets the prettyPrint.
+     *
+     * @return the prettyPrint
+     */
+    public Boolean getPrettyPrint() {
+        return prettyPrint;
     }
 }

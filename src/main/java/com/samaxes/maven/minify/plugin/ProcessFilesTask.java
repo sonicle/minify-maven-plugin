@@ -160,7 +160,7 @@ public abstract class ProcessFilesTask implements Callable<Object> {
                                 originalPath.lastIndexOf(File.separator));
                         File targetPath = new File(targetDir.getAbsolutePath() + subPath);
                         targetPath.mkdirs();
-
+						
                         File minifiedFile = new File(targetPath, (nosuffix) ? mergedFile.getName()
                                 : FileUtils.basename(mergedFile.getName()) + suffix
                                         + FileUtils.getExtension(mergedFile.getName()));

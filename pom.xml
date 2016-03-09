@@ -7,8 +7,12 @@
 
     <groupId>com.sonicle.maven</groupId>
     <artifactId>minify-maven-plugin</artifactId>
-    <version>1.7.5-SNAPSHOT</version>
+    <version>1.0.175</version>
     <packaging>maven-plugin</packaging>
+	
+	<prerequisites>
+		<maven>3.0.5</maven>
+	</prerequisites>
 
     <name>minify-maven-plugin</name>
     <description>Combine and minimize JavaScript and CSS files for faster page loading.</description>
@@ -25,32 +29,24 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
-    <developers>
-        <developer>
-            <name>Matteo Albinola</name>
-            <url>http://www.sonicle.com</url>
-            <roles>
-                <role>Project owner</role>
-                <role>Developer</role>
-            </roles>
-            <timezone>Europe/Milan</timezone>
-        </developer>
-    </developers>
-
-    <prerequisites>
-        <maven>${maven.api.version}</maven>
-    </prerequisites>
-
-    <scm>
-        <connection>scm:git:https://github.com/sonicle/minify-maven-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:sonicle/minify-maven-plugin.git</developerConnection>
-        <url>https://github.com/sonicle/minify-maven-plugin</url>
-    </scm>
-    <issueManagement>
-        <system>GitHub</system>
-        <url>https://github.com/sonicle/minify-maven-plugin/issues</url>
-    </issueManagement>
+	
+	<scm>
+		<url>https://github.com/sonicle/minify-maven-plugin</url>
+		<connection>scm:git:https://github.com/sonicle/minify-maven-plugin.git</connection>
+		<developerConnection>scm:git:git@github.com:sonicle/minify-maven-plugin.git</developerConnection>
+	</scm>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/sonicle/minify-maven-plugin/issues</url>
+	</issueManagement>
+	
+	<developers>
+		<developer>
+			<name>Matteo Albinola</name>
+			<url>http://www.sonicle.com</url>
+			<email>malbinola@sonicle.com</email>
+		</developer>
+	</developers>
 
     <properties>
         <maven.compiler.source>1.7</maven.compiler.source>

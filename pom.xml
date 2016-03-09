@@ -10,7 +10,7 @@
     <version>1.7.5-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
-    <name>Sonicle Minify Maven Plugin</name>
+    <name>minify-maven-plugin</name>
     <description>Combine and minimize JavaScript and CSS files for faster page loading.</description>
     <url>https://github.com/sonicle/minify-maven-plugin</url>
     <inceptionYear>2009</inceptionYear>

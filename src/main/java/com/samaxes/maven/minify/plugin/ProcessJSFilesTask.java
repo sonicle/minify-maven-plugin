@@ -41,6 +41,7 @@ import com.google.javascript.jscomp.SourceFile;
 import com.google.javascript.jscomp.SourceMap;
 import com.samaxes.maven.minify.cleaner.CleanerOptions;
 import com.samaxes.maven.minify.cleaner.JavaScriptCleaner;
+import com.samaxes.maven.minify.common.CleanerConfig;
 import com.samaxes.maven.minify.common.ClosureConfig;
 import com.samaxes.maven.minify.common.JavaScriptErrorReporter;
 import com.samaxes.maven.minify.common.YuiConfig;
@@ -53,6 +54,7 @@ import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 public class ProcessJSFilesTask extends ProcessFilesTask {
 
     private final ClosureConfig closureConfig;
+	private final CleanerConfig cleanerConfig;
 
     /**
      * Task constructor.
@@ -77,18 +79,20 @@ public class ProcessJSFilesTask extends ProcessFilesTask {
      * @param engine minify processor engine selected
      * @param yuiConfig YUI Compressor configuration
      * @param closureConfig Google Closure Compiler configuration
+	 * @param cleanerConfig Cleaner configuration
      * @throws FileNotFoundException when the given source file does not exist
      */
     public ProcessJSFilesTask(Log log, boolean verbose, Integer bufferSize, String charset, String suffix,
             boolean nosuffix, boolean skipMerge, boolean skipMinify, String webappSourceDir, String webappTargetDir,
             String inputDir, List<String> sourceFiles, List<String> sourceIncludes, List<String> sourceExcludes,
-            String outputDir, String outputFilename, Engine engine, YuiConfig yuiConfig, ClosureConfig closureConfig)
+            String outputDir, String outputFilename, Engine engine, YuiConfig yuiConfig, ClosureConfig closureConfig, CleanerConfig cleanerConfig)
             throws FileNotFoundException {
         super(log, verbose, bufferSize, charset, suffix, nosuffix, skipMerge, skipMinify, webappSourceDir,
                 webappTargetDir, inputDir, sourceFiles, sourceIncludes, sourceExcludes, outputDir, outputFilename,
                 engine, yuiConfig);
 
         this.closureConfig = closureConfig;
+		this.cleanerConfig = cleanerConfig;
     }
 
     /**
@@ -168,6 +172,9 @@ public class ProcessJSFilesTask extends ProcessFilesTask {
 					log.info("Using Cleaner engine.");
 					
 					CleanerOptions cleanerOptions = new CleanerOptions();
+					cleanerOptions.setRemoveSingleLineComments(cleanerConfig.isRemoveSingleLineComments());
+					cleanerOptions.setRemoveMultiLinesComments(cleanerConfig.isRemoveMultiLinesComments());
+					cleanerOptions.setExpandTabsToSpaces(cleanerConfig.isExpandTabsToSpaces());
 					JavaScriptCleaner cleaner = new JavaScriptCleaner(reader, cleanerOptions);
 					cleaner.process(writer);
 					break;

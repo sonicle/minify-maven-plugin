@@ -47,6 +47,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import static com.google.common.collect.Lists.newArrayList;
+import com.samaxes.maven.minify.common.CleanerConfig;
 
 /**
  * Goal for combining and minifying CSS and JavaScript files.
@@ -463,6 +464,20 @@ public class MinifyMojo extends AbstractMojo {
 	 */
 	@Parameter(property = "closurePrettyPrint", defaultValue = "false")
 	private boolean closurePrettyPrint;
+	
+	
+	/* ************************************ */
+    /* Cleaner Only Options */
+    /* ************************************ */
+	
+	@Parameter(property = "cleanerRemoveSingleLineComments", defaultValue = "true")
+	private boolean cleanerRemoveSingleLineComments;
+	
+	@Parameter(property = "cleanerRemoveMultiLinesComments", defaultValue = "true")
+	private boolean cleanerRemoveMultiLinesComments;
+	
+	@Parameter(property = "cleanerExpandTabsToSpaces", defaultValue = "false")
+	private boolean cleanerExpandTabsToSpaces;
 
     /**
      * Executed when the goal is invoked, it will first invoke a parallel lifecycle, ending at the given phase.
@@ -480,9 +495,10 @@ public class MinifyMojo extends AbstractMojo {
 
         YuiConfig yuiConfig = fillYuiConfig();
         ClosureConfig closureConfig = fillClosureConfig();
+		CleanerConfig cleanerConfig = fillCleanerConfig();
         Collection<ProcessFilesTask> processFilesTasks;
         try {
-            processFilesTasks = createTasks(yuiConfig, closureConfig);
+            processFilesTasks = createTasks(yuiConfig, closureConfig, cleanerConfig);
         } catch (FileNotFoundException e) {
             throw new MojoFailureException(e.getMessage(), e);
         }
@@ -565,8 +581,12 @@ public class MinifyMojo extends AbstractMojo {
         return new ClosureConfig(closureLanguage, closureCompilationLevel, dependencyOptions, externs,
                 closureUseDefaultExterns, closureCreateSourceMap, closureAngularPass, closurePrettyPrint);
     }
+	
+	private CleanerConfig fillCleanerConfig() {
+        return new CleanerConfig(cleanerRemoveSingleLineComments, cleanerRemoveMultiLinesComments, cleanerExpandTabsToSpaces);
+    }
 
-    private Collection<ProcessFilesTask> createTasks(YuiConfig yuiConfig, ClosureConfig closureConfig)
+    private Collection<ProcessFilesTask> createTasks(YuiConfig yuiConfig, ClosureConfig closureConfig, CleanerConfig cleanerConfig)
             throws MojoFailureException, FileNotFoundException {
         List<ProcessFilesTask> tasks = newArrayList();
 
@@ -585,14 +605,14 @@ public class MinifyMojo extends AbstractMojo {
                     tasks.add(createCSSTask(yuiConfig, closureConfig, aggregation.getFiles(),
                             Collections.<String>emptyList(), Collections.<String>emptyList(), aggregation.getName()));
                 } else if (Aggregation.AggregationType.js.equals(aggregation.getType())) {
-                    tasks.add(createJSTask(yuiConfig, closureConfig, aggregation.getFiles(),
+                    tasks.add(createJSTask(yuiConfig, closureConfig, cleanerConfig, aggregation.getFiles(),
                             Collections.<String>emptyList(), Collections.<String>emptyList(), aggregation.getName()));
                 }
             }
         } else { // Otherwise, fallback to the default behavior
             tasks.add(createCSSTask(yuiConfig, closureConfig, cssSourceFiles, cssSourceIncludes, cssSourceExcludes,
                     cssFinalFile));
-            tasks.add(createJSTask(yuiConfig, closureConfig, jsSourceFiles, jsSourceIncludes, jsSourceExcludes,
+            tasks.add(createJSTask(yuiConfig, closureConfig, cleanerConfig, jsSourceFiles, jsSourceIncludes, jsSourceExcludes,
                     jsFinalFile));
         }
 
@@ -607,11 +627,11 @@ public class MinifyMojo extends AbstractMojo {
                 cssTargetDir, cssFinalFile, cssEngine, yuiConfig);
     }
 
-    private ProcessFilesTask createJSTask(YuiConfig yuiConfig, ClosureConfig closureConfig, List<String> jsSourceFiles,
+    private ProcessFilesTask createJSTask(YuiConfig yuiConfig, ClosureConfig closureConfig, CleanerConfig cleanerConfig, List<String> jsSourceFiles,
                                           List<String> jsSourceIncludes, List<String> jsSourceExcludes, String jsFinalFile)
             throws FileNotFoundException {
         return new ProcessJSFilesTask(getLog(), debug, bufferSize, charset, suffix, nosuffix, skipMerge, skipMinify,
                 webappSourceDir, webappTargetDir, jsSourceDir, jsSourceFiles, jsSourceIncludes, jsSourceExcludes,
-                jsTargetDir, jsFinalFile, jsEngine, yuiConfig, closureConfig);
+                jsTargetDir, jsFinalFile, jsEngine, yuiConfig, closureConfig, cleanerConfig);
     }
 }

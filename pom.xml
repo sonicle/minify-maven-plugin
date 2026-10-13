@@ -7,7 +7,7 @@
 
     <groupId>com.sonicle.maven</groupId>
     <artifactId>minify-maven-plugin</artifactId>
-    <version>1.0.175</version>
+    <version>1.1.175</version>
     <packaging>maven-plugin</packaging>
 	
 	<prerequisites>

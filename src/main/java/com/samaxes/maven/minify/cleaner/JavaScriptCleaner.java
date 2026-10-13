@@ -18,6 +18,7 @@ package com.samaxes.maven.minify.cleaner;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.regex.Matcher;
 
 /**
  *
@@ -32,14 +33,9 @@ public class JavaScriptCleaner extends AbstractCleaner {
 	@Override
 	public void process(Writer writer) throws IOException {
 		String s = content.toString();
-		//Pattern pattern = Pattern.compile("/\\*.*?\\*/", Pattern.DOTALL);
-		//s = pattern.matcher(content).replaceAll("");
-		
-		if(options.getRemoveMultiLinesComments()) {
-			s = RegexPatterns.MULTILINE_COMMENT.matcher(s).replaceAll("");
-		}
-		if(options.getRemoveSingleLineComments()) {
-			s = s.replaceAll("//.*", ""); // Remove //comments
+
+		if(options.getRemoveMultiLinesComments() || options.getRemoveSingleLineComments()) {
+			s = removeComments(s);
 		}
 		s = s.replaceAll("\\s+\n", "\n"); // Trim trailing whitespace
 		if(options.getExpandTabsToSpaces()) {
@@ -49,5 +45,25 @@ public class JavaScriptCleaner extends AbstractCleaner {
 		s = s.replaceAll("^\n", ""); // Remove leading linefeeds
 		
 		writer.append(s);
+	}
+
+	/**
+	 * Drops comments in a single pass, so that each comment marker is evaluated
+	 * knowing whether it lies inside a string, a regex or another comment.
+	 */
+	private String removeComments(String s) {
+		Matcher matcher = RegexPatterns.JS_LITERAL_OR_COMMENT.matcher(s);
+		StringBuffer sb = new StringBuffer(s.length());
+		while(matcher.find()) {
+			boolean remove = false;
+			if(matcher.group(2) != null) {
+				remove = options.getRemoveMultiLinesComments();
+			} else if(matcher.group(3) != null) {
+				remove = options.getRemoveSingleLineComments();
+			}
+			matcher.appendReplacement(sb, remove ? "" : Matcher.quoteReplacement(matcher.group()));
+		}
+		matcher.appendTail(sb);
+		return sb.toString();
 	}
 }
